@@ -47,12 +47,6 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
 
         g.fillRect(25, 75, 850, 600);
 
-       /* right.paintIcon(this, g, 100, 100);
-        body.paintIcon(this, g, 75, 100);
-        body.paintIcon(this, g, 50, 100); // See what it looks like first */
-
-        //right.paintIcon(this, g, snakeX[0], snakeY[0]); // Snake head is always at [0], to right first
-
         switch (direction) {
             case "R" -> right.paintIcon(this, g, snakeX[0], snakeY[0]);
             case "L" -> left.paintIcon(this, g, snakeX[0], snakeY[0]);
@@ -151,7 +145,13 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
                 }
             }
 
-
+            // If the snake head covered the food, the snake grow.
+            if (snakeX[0] == foodX && snakeY[0] == foodY) {
+                len ++;
+                // Get a new food.
+                foodX = 25 + 25 * random.nextInt(34); // From 0 to 33 block. 25 * 34 = 850.
+                foodY = 75 + 25 * random.nextInt(24); // 24 * 25 = 600.
+            }
 
 
             repaint();
