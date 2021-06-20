@@ -23,6 +23,7 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
 
     String direction = "R";
     boolean isStarted = false;
+    boolean isFailed = false;
 
     // Import Timer. Want faster, delay number smaller.
     Timer timer = new Timer(200, this);
@@ -67,6 +68,12 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
             g.drawString("Press space to START", 250, 600);
         }
 
+        if (isFailed) {
+            g.setColor(Color.RED);
+            g.setFont(new Font("arial", Font.BOLD, 40));
+            g.drawString("Failed: Press space to RESTART", 150, 600);
+        }
+
     }
 
     /**
@@ -96,7 +103,14 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_SPACE) {
+            // Restart if failed.
+            if (isFailed) {
+                isFailed = false;
+                initSnake();
+            }
+
             isStarted = !isStarted;
+
             repaint();
         } else if (keyCode == KeyEvent.VK_RIGHT) {
             direction = "R";
@@ -117,7 +131,7 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (isStarted) {
+        if (isStarted && !isFailed) {
             // Move the body one step forward:
             for (int i = len - 1; i > 0; i--) {
                 snakeX[i] = snakeX[i - 1];
@@ -153,6 +167,13 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
                 foodY = 75 + 25 * random.nextInt(24); // 24 * 25 = 600.
             }
 
+            // Judge if failed: if snake head touched it's body, it's dead.
+            for (int i = 1; i < len; i++) {
+                if (snakeX[i] == snakeX[0] && snakeY[i] == snakeY[0]) {
+                    isFailed = true;
+                    break;
+                }
+            }
 
             repaint();
         }
