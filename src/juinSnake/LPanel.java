@@ -87,6 +87,14 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
         if (keyCode == KeyEvent.VK_SPACE) {
             isStarted = !isStarted;
             repaint();
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
+            direction = "R";
+        } else if (keyCode == KeyEvent.VK_LEFT) {
+            direction = "L";
+        } else if (keyCode == KeyEvent.VK_UP) {
+            direction = "U";
+        } else if (keyCode == KeyEvent.VK_DOWN) {
+            direction = "D";
         }
     }
 
@@ -98,16 +106,40 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        // Move the body one step forward:
-        for (int i = len - 1; i > 0; i--) {
-            snakeX[i] = snakeX[i - 1];
-            snakeY[i] = snakeY[i - 1];
-        }
-        // Move the head:
-        snakeX[0] = snakeX[0] + 25;
-        if (snakeX[0] > 850) snakeX[0] = 25; // Don't let it out of the canvas.
+        if (isStarted) {
+            // Move the body one step forward:
+            for (int i = len - 1; i > 0; i--) {
+                snakeX[i] = snakeX[i - 1];
+                snakeY[i] = snakeY[i - 1];
+            }
 
-        repaint();
+            // How to move:
+            switch (direction) {
+                case "R" -> {
+                    // Move the head right:
+                    snakeX[0] = snakeX[0] + 25;
+                    if (snakeX[0] > 850) snakeX[0] = 25; // Don't let it out of the canvas.
+                }
+                case "L" -> {
+                    snakeX[0] = snakeX[0] - 25;
+                    if (snakeX[0] < 25) snakeX[0] = 850;
+                }
+                case "D" -> {
+                    snakeY[0] = snakeY[0] + 25;
+                    if (snakeY[0] > 650) snakeY[0] = 75;
+                }
+                case "U" -> {
+                    snakeY[0] = snakeY[0] - 25;
+                    if (snakeY[0] < 75) snakeY[0] = 650;
+                }
+            }
+
+
+
+
+            repaint();
+        }
+
         timer.start();
     }
 }
