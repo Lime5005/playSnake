@@ -18,6 +18,7 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
     ImageIcon right = new ImageIcon("right.png");
 
     int len;
+    int score;
     int[] snakeX = new int[750];
     int[] snakeY = new int[750];
 
@@ -25,7 +26,7 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
     boolean isStarted = false;
     boolean isFailed = false;
 
-    // Import Timer. Want faster, delay number smaller.
+    // Import Timer. Want faster, delay number smaller. In millisecond
     Timer timer = new Timer(200, this);
 
     // Set a food at a random place.
@@ -47,6 +48,11 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
         title.paintIcon(this, g, 25, 11);
 
         g.fillRect(25, 75, 850, 600);
+
+        // Draw the length and the score.
+        g.setColor(Color.WHITE);
+        g.drawString("Length: " + len, 730, 35);
+        g.drawString("Score: " + score, 730, 55);
 
         switch (direction) {
             case "R" -> right.paintIcon(this, g, snakeX[0], snakeY[0]);
@@ -81,6 +87,8 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
      */
     public void initSnake() {
         len = 3;
+        score = 0;
+        direction = "R";
         snakeX[0] = 100;
         snakeY[0] = 100;
         snakeX[1] = 75;
@@ -162,6 +170,7 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
             // If the snake head covered the food, the snake grow.
             if (snakeX[0] == foodX && snakeY[0] == foodY) {
                 len ++;
+                score += 10;
                 // Get a new food.
                 foodX = 25 + 25 * random.nextInt(34); // From 0 to 33 block. 25 * 34 = 850.
                 foodY = 75 + 25 * random.nextInt(24); // 24 * 25 = 600.
