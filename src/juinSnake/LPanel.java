@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 public class LPanel extends JPanel implements KeyListener, ActionListener {
     ImageIcon title = new ImageIcon("title.jpeg");
@@ -20,11 +21,16 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
     int[] snakeX = new int[750];
     int[] snakeY = new int[750];
 
-    String direction = "D";
+    String direction = "R";
     boolean isStarted = false;
 
     // Import Timer. Want faster, delay number smaller.
     Timer timer = new Timer(200, this);
+
+    // Set a food at a random place.
+    int foodX;
+    int foodY;
+    Random random = new Random();
 
     public LPanel(){
         initSnake();
@@ -58,14 +64,20 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
             body.paintIcon(this, g, snakeX[i], snakeY[i]);
         }
 
+        // Paint the food randomly.
+        food.paintIcon(this, g, foodX, foodY);
+
         if (!isStarted) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("arial", Font.BOLD, 40));
-            g.drawString("Press space to START", 300, 300);
+            g.drawString("Press space to START", 250, 600);
         }
 
     }
 
+    /**
+     * At the beginning, the snake is shaped and the food is set.
+     */
     public void initSnake() {
         len = 3;
         snakeX[0] = 100;
@@ -74,6 +86,11 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
         snakeY[1] = 100;
         snakeX[2] = 50;
         snakeY[2] = 100;
+
+        // Put the food in a scope not outside of the canvas.
+        foodX = 25 + 25 * random.nextInt(34); // From 0 to 33 block. 25 * 34 = 850.
+        foodY = 75 + 25 * random.nextInt(24); // 24 * 25 = 600.
+
     }
 
     @Override
