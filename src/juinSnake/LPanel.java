@@ -2,10 +2,12 @@ package juinSnake;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class LPanel extends JPanel implements KeyListener {
+public class LPanel extends JPanel implements KeyListener, ActionListener {
     ImageIcon title = new ImageIcon("title.jpeg");
     ImageIcon body = new ImageIcon("body.png");
     ImageIcon food = new ImageIcon("food.png");
@@ -21,10 +23,14 @@ public class LPanel extends JPanel implements KeyListener {
     String direction = "D";
     boolean isStarted = false;
 
+    // Import Timer. Want faster, delay number smaller.
+    Timer timer = new Timer(200, this);
+
     public LPanel(){
         initSnake();
         this.setFocusable(true); // To get the key board Event
         this.addKeyListener(this);
+        timer.start(); // Continue the timer
     }
 
     public void paintComponent(Graphics g) {
@@ -39,7 +45,7 @@ public class LPanel extends JPanel implements KeyListener {
         body.paintIcon(this, g, 75, 100);
         body.paintIcon(this, g, 50, 100); // See what it looks like first */
 
-        //right.paintIcon(this, g, snakeX[0], snakeY[0]); // Snake head to right first
+        //right.paintIcon(this, g, snakeX[0], snakeY[0]); // Snake head is always at [0], to right first
 
         switch (direction) {
             case "R" -> right.paintIcon(this, g, snakeX[0], snakeY[0]);
@@ -87,5 +93,21 @@ public class LPanel extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        // Move the body one step forward:
+        for (int i = len - 1; i > 0; i--) {
+            snakeX[i] = snakeX[i - 1];
+            snakeY[i] = snakeY[i - 1];
+        }
+        // Move the head:
+        snakeX[0] = snakeX[0] + 25;
+        if (snakeX[0] > 850) snakeX[0] = 25; // Don't let it out of the canvas.
+
+        repaint();
+        timer.start();
     }
 }
