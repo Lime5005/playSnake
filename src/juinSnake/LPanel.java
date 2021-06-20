@@ -89,6 +89,7 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
         len = 3;
         score = 0;
         direction = "R";
+        timer.setDelay(200);
         snakeX[0] = 100;
         snakeY[0] = 100;
         snakeX[1] = 75;
@@ -182,6 +183,15 @@ public class LPanel extends JPanel implements KeyListener, ActionListener {
                     isFailed = true;
                     break;
                 }
+            }
+
+            // If the length > 4 or > 7 or > 12, snack run faster.
+            if (len > 4 && len < 7) {
+                timer.setDelay(100);
+            } else if (len >= 7 && len < 12) {
+                timer.setDelay(50);
+            } else if (len >= 12) {
+                timer.setDelay(20);
             }
 
             repaint();
